@@ -23,6 +23,9 @@ const client = new MongoClient(uri, {
   }
 });
 
+app.get('/', (req, res) => {
+  res.send('Brand server is running');
+})
 
 
 async function run() {
@@ -133,12 +136,17 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) }
       const result = await cartCollection.findOne(query);
-      // console.log(result);
-      res.setHeader('Content-Type', 'application/json');
+      console.log(result);
       res.send(result);
     });
 
-
+    app.delete('/cart/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await cartCollection.deleteOne(query);
+      console.log(result);
+      res.send(result);
+    })
 
 
 
@@ -157,9 +165,6 @@ async function run() {
 run().catch(console.dir);
 
 
-app.get('/', (req, res) => {
-  res.send('Brand server is running');
-})
 
 app.listen(port, () => {
   console.log(`brand server is running on port: ${port}`)
